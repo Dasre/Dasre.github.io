@@ -1,6 +1,7 @@
 ---
 title: 使用Google Apps Script(GAS)串接Google Sheets
 date: 2020-03-16 16:26:20
+type: "tags"
 tags:
 - w3HexSchool
 ---
