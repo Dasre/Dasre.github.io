@@ -16,16 +16,16 @@ Vagrant背後可以使用VirtualBox作為虛擬機，因此在使用Vagrant前�
 ## Vagrant使用
 Vagrant基本上是透過前面所提的Vagrantfile去完成一系列自動化完成的動作。我們可以透過`vagrant init`去初始化我們的Vagrantfile文件，或是透過`vagrant init <boxname> `安裝在[Vagrant Cloud](https://app.vagrantup.com/boxes/search)已經定義好的box。以下我們以安裝centos7為例。
 
-![](Vagrant/1.png)
+{% asset_img 1.png %}
 
 透過`vagrant up`運行虛擬機
 
-![](Vagrant/2.png)
+{% asset_img 2.png %}
 
 我們可以到VirtualBox發現目前有一台虛擬機是啟動的狀況
-![](Vagrant/3.png)
+{% asset_img 3.png %}
 
 至於要如何操控這台虛擬器，我們可以透過 `vagrant status `查看vagrantfile所建立的虛擬機，再透過vagrant 所提供的ssh連上此虛擬機
 
-![](Vagrant/4.png)
+{% asset_img 4.png %}
 

@@ -70,6 +70,6 @@ ZSH_THEME="astro"
 
 ------
 ### 最終成果
-![VScode.png - Google 雲端硬碟](VScode.png)
+{% asset_img VScode.png %}
 
 

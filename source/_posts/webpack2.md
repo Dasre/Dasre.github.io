@@ -11,9 +11,9 @@ tags:
 我們前面entry的index.js檔案，有使用到es6的語法，雖然目前市面上的browser大多對es6的語法都可以解析了，但並不是全部都如此，也因此這邊會使用到[babel-loader](https://github.com/babel/babel-loader)，幫助我們把es6的語法轉成es5。
 
 index.js
-![](1.png)
+{% asset_img 1.png %}
 原本打包完的檔案內容
-![](2.png)
+{% asset_img 1.png %}
 
 ---
 
@@ -70,7 +70,7 @@ module: {
 * use裡面的loader是告訴webpack遇到.js檔案要使用哪個loader來進行處理。options就是其他的細部設定，可以設定瀏覽器版本等等，更多詳細可以參考[連結](https://babeljs.io/docs/en/babel-preset-env)。
 
 經過babel-loader編譯完成後，內容會變更
-![](/webpack2/3.png)
+{% asset_img 3.png %}
 原本的const宣告變數方法變成var，箭頭函式變成原本function(){}的寫法。
 
 ---

@@ -37,7 +37,7 @@ bot.login('your-token');
 ```
 
 上述輸入完後，就會在你的Discord頻道看到Discord 機器人。
-![](bot.png)
+{% asset_img bot.png %}
 我這邊因為已經啟動上述的code，所以bot會是線上的狀況，如果沒有執行的話，會顯示離線。
 
 在建立完bot之後，接下來就是要開始監聽輸入的內容。

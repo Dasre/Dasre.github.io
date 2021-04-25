@@ -16,7 +16,7 @@ ESLint是一個code的檢查工具，他可以幫我們檢查我們code是否符
 npm install eslint -g
 ```
 要注意ESLint對於node和npm版本有要求，如果不符合ESLint所要求的版本，請將node和npm安裝到目前的穩定版本。
-![](ESLint/2.png)
+{% asset_img 2.png %}
 一般我會使用
 ```
 npm install npm -g
@@ -43,7 +43,7 @@ npm install n -g
 eslint --init
 ```
 建置.eslintrc.js文件
-![](ESLint/1.png)
+{% asset_img 1.png %}
 建置過程中會問一些設定的問題，根據選項去選擇即可。至於style guide部分，有三種規範可以使用。分別是
 * Google
 * Airbnb
@@ -55,7 +55,7 @@ eslint --init
 在選擇完規範後，會選擇要以yaml、js還是json儲存規範，這邊選擇js。
 
 重開安裝eslint的專案，在問題部分就會提醒你code哪邊不符合規範。
-![](ESLint/3.png)
+{% asset_img 3.png %}
 比如說括號前後要空格，或是props參數沒用到等等。
 
 在.eslintrc.js的文件中，會有許多的設定。

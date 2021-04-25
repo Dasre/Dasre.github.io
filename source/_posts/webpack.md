@@ -23,7 +23,7 @@ npm init
 npm install webpack webpack-cli --save-dev
 ```
 此時，package.json內應該就會有剛剛安裝的webpack版本資訊。
-![](/webpack/1.png)
+{% asset_img 1.png %}
 
 接下來我們就是要設定webpack的設定檔。
 
