@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"dasre.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Github Actions自動部署Hexo Blog到Github Pages前言在使用Github Actions之前，要部署至Github Pages都是透過hexo d -g指令先生成靜態頁面再上傳到Github Pages。也因此在這次整理Blog並更換Blog主題時，決定順便把自動化部屬方面給加上去。 下面會說明在整個過程。 Hexo安裝與主題安裝安裝Hexo12345&#x2F;&#x2F; 全域安裝H">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="https://dasre.github.io/2021/03/22/Hexo/index.html">
+<meta property="og:site_name" content="Andy Blog">
+<meta property="og:description" content="Github Actions自動部署Hexo Blog到Github Pages前言在使用Github Actions之前，要部署至Github Pages都是透過hexo d -g指令先生成靜態頁面再上傳到Github Pages。也因此在這次整理Blog並更換Blog主題時，決定順便把自動化部屬方面給加上去。 下面會說明在整個過程。 Hexo安裝與主題安裝安裝Hexo12345&#x2F;&#x2F; 全域安裝H">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-03-22T15:08:37.000Z">
+<meta property="article:modified_time" content="2021-05-15T15:54:49.532Z">
+<meta property="article:author" content="Andy Chen">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Blog">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://dasre.github.io/2021/03/22/Hexo/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Hexo | Andy Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Andy Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://dasre.github.io/2021/03/22/Hexo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Andy Chen">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Andy Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hexo
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-22 23:08:37" itemprop="dateCreated datePublished" datetime="2021-03-22T23:08:37+08:00">2021-03-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-15 23:54:49" itemprop="dateModified" datetime="2021-05-15T23:54:49+08:00">2021-05-15</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2021/03/22/Hexo/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/03/22/Hexo/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Github-Actions自動部署Hexo-Blog到Github-Pages"><a href="#Github-Actions自動部署Hexo-Blog到Github-Pages" class="headerlink" title="Github Actions自動部署Hexo Blog到Github Pages"></a>Github Actions自動部署Hexo Blog到Github Pages</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在使用Github Actions之前，要部署至Github Pages都是透過<code>hexo d -g</code>指令先生成靜態頁面再上傳到Github Pages。也因此在這次整理Blog並更換Blog主題時，決定順便把自動化部屬方面給加上去。</p>
+<p>下面會說明在整個過程。</p>
+<h2 id="Hexo安裝與主題安裝"><a href="#Hexo安裝與主題安裝" class="headerlink" title="Hexo安裝與主題安裝"></a>Hexo安裝與主題安裝</h2><h3 id="安裝Hexo"><a href="#安裝Hexo" class="headerlink" title="安裝Hexo"></a>安裝Hexo</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 全域安裝Hexo</span><br><span class="line"><span class="meta">$</span><span class="bash"> npm install -g hexo-cli</span></span><br><span class="line"></span><br><span class="line">// Hexo檔案生成</span><br><span class="line"><span class="meta">$</span><span class="bash"> hexo init &lt;blog-name&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="安裝Hexo-Next主題"><a href="#安裝Hexo-Next主題" class="headerlink" title="安裝Hexo Next主題"></a>安裝Hexo Next主題</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">cd</span> &lt;blog-name&gt;</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git <span class="built_in">clone</span> https://github.com/theme-next/hexo-theme-next themes/next</span></span><br></pre></td></tr></table></figure>
+<p>git clone完後，確認根目錄的themes資料夾內有next資料夾，確認完畢後我們可以先行修改<span style="color: red">根目錄</span>的<code>_config.yml</code>檔案。</p>
+<p>該檔案的有許多設定可以更換，但這不是我們這次的主題，不多做說明。</p>
+<p>我們的目標是將Extensions的<span style="color: red">theme</span>改成next。</p>
+<h3 id="Next主題之設定"><a href="#Next主題之設定" class="headerlink" title="Next主題之設定"></a>Next主題之設定</h3><p>這邊Next主題下載下來後，有兩種方式可以讓我們部署上去時，CSS這些文件能順利上傳。</p>
+<ol>
+<li>採用git submodules</li>
+<li>暴力方式，把Next主題先關git的東西全部刪除，但之後無法透過git更新主題。</li>
+</ol>
+<p>這邊我們先採用第二種方式，我們需要先切到<code>themes/next/</code>資料夾，將<code>.git</code>資料夾、<code>.gitignore</code>和<code>README.md</code>檔案刪除。而上述行為是為了在上傳Github時，可以順利的抓到主題資料。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">cd</span> themes/next/</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> rm -rf .git</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> rm -rf .gitignore</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> rm -rf README.md</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> rm -rf docs/AUTHORS.md</span></span><br></pre></td></tr></table></figure>
+<p>使用<code>rm -rf</code>指令時，需要意會不需檢查強制刪除。</p>
+<h2 id="Github-Pages設定"><a href="#Github-Pages設定" class="headerlink" title="Github Pages設定"></a>Github Pages設定</h2><p>這邊我們需要先在github上建立一個名為<code>&lt;username&gt;.github.io</code>的repository，並設定為public。接著就是將Hexo blog的專案設定git。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git init</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git add .</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git commit -m <span class="string">&quot;first commit&quot;</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git branch -M main</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git remote add origin https://github.com/Dasre/Dasre.github.io.git</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git push -u origin main</span></span><br></pre></td></tr></table></figure>
+<p>這邊我們會將不是deploy的原始檔案放在main這個branch。</p>
+<h2 id="Travis-CI設定-舊方法"><a href="#Travis-CI設定-舊方法" class="headerlink" title="Travis CI設定(舊方法)"></a>Travis CI設定(舊方法)</h2><p>Travis CI是Hexo官網提供的一個CI方法，但Travis CI在去年取消免費使用，每個使用者給予10000積分(linus系統部署1分鐘需要10積分，macOS系統部署1分鐘要50積分)，當積分不夠時就需要購買了。</p>
+<p>雖然現在不會再使用此方法部署，但還是簡單說明一下Travis CI的方法。</p>
+<ol>
+<li>到<a target="_blank" rel="noopener" href="https://www.travis-ci.com/">Travis</a>註冊帳號，使用Github帳號即可。</li>
+<li>到<a target="_blank" rel="noopener" href="https://github.com/settings/installations">Applications settings</a>設定使Travis CI可以訪問帳號的倉庫內容。</li>
+<li>到Github的使用者Settings &gt; Developer settings &gt; Personal access tokens產生一組token，名稱可以自己定，下方的Select scopes要打開repo的public_repo，產生完畢後把token複製下來。</li>
+<li>到Travis確認是否有抓到使用者的專案，沒有的話點Activate，並允許Travis CI在你的Github帳號上。</li>
+<li>有抓到專案後，但專案的Settings，在Environment Variables新增參數，這邊Name我們用<code>GH_TOKEN</code>，Value則填上步驟3所複製的token，填完後按ADD。</li>
+<li>在根目錄新增一檔案<code>.travis.yml</code>，並在裡面新增以下內容。<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">os:</span> <span class="string">linux</span></span><br><span class="line"><span class="attr">language:</span> <span class="string">node_js</span> </span><br><span class="line"><span class="attr">node_js:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">&#x27;12&#x27;</span>  <span class="comment"># 使用 nodejs 12版</span></span><br><span class="line"><span class="attr">branches:</span></span><br><span class="line">  <span class="attr">only:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">main</span> <span class="comment"># 只監控main這個branch</span></span><br><span class="line"><span class="attr">cache:</span></span><br><span class="line">  <span class="attr">directories:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">node_modules</span></span><br><span class="line"><span class="attr">script:</span> </span><br><span class="line">  <span class="bullet">-</span> <span class="string">hexo</span> <span class="string">generate</span> <span class="comment"># 產生靜態檔案</span></span><br><span class="line"><span class="attr">deploy:</span> </span><br><span class="line">  <span class="attr">provider:</span> <span class="string">pages</span></span><br><span class="line">  <span class="attr">skip_cleanup:</span> <span class="literal">true</span> </span><br><span class="line">  <span class="attr">token:</span> <span class="string">$GH_TOKEN</span> <span class="comment"># 步驟5那個token name</span></span><br><span class="line">  <span class="attr">keep_history:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">on:</span></span><br><span class="line">    <span class="attr">branch:</span> <span class="string">main</span> <span class="comment"># hexo文件所在branch</span></span><br><span class="line">  <span class="attr">local_dir:</span> <span class="string">public</span> </span><br><span class="line">  <span class="attr">target_branch:</span> <span class="string">master</span> <span class="comment"># 存放靜態檔案生完後的branch</span></span><br></pre></td></tr></table></figure></li>
+<li>在步驟6新增完此檔案並push上去後，Travis的Running部分應該就會看到有在執行，執行完畢確認沒問題後，到專案的Settings，把GitHub Pages的Source Branch改成master，就完成Blog的自動化部屬了。</li>
+</ol>
+<h2 id="GitHub-Actions部署"><a href="#GitHub-Actions部署" class="headerlink" title="GitHub Actions部署"></a>GitHub Actions部署</h2><h3 id="建立Key"><a href="#建立Key" class="headerlink" title="建立Key"></a>建立Key</h3><p>若要使用Github Actions，其道理和Travis CI很像，就是我們要給予Deploy的功能。</p>
+<p>首先我們可以在blog專案的根目錄執行下列code：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// -t key type</span><br><span class="line">// -b key的bits長度</span><br><span class="line">// -C 註解</span><br><span class="line">// -f 密碼文件的名稱</span><br><span class="line">// -N Key的passphrase</span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> ssh-keygen -t rsa -b 4096 -C <span class="string">&quot;&lt;your email&gt;&quot;</span> -f github-deploy-key -N <span class="string">&quot;&quot;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>關於上述ssh-keygen的option若有興趣了解，可參考<a target="_blank" rel="noopener" href="https://www.ssh.com/ssh/keygen/">連結</a>;</p>
+<p>執行完上述的code，會產生兩個檔案</p>
+<ol>
+<li>github-deploy-key: 私鑰</li>
+<li>github-deploy-key.pub: 公鑰</li>
+</ol>
+<p>記得，這兩個檔案要加入<code>.gitignore</code>，不然公開大家都可以針對你的專案做修改。</p>
+<h3 id="Github加入Key"><a href="#Github加入Key" class="headerlink" title="Github加入Key"></a>Github加入Key</h3><ol>
+<li>到github專案的Settings -&gt; Secrets -&gt; New repository secret<ul>
+<li>Name自己設定就好，但會影響到後續Github Actions的名稱，這邊輸入<code>HEXO_DEPLOY</code></li>
+<li>Value則輸入私鑰github-deploy-key的內容</li>
+</ul>
+</li>
+<li>到github專案的Settings -&gt; Deploy keys -&gt; Add deploy key<ul>
+<li>Name一樣自己定，這邊輸入<code>HEXO_DEPLOY_PUB</code></li>
+<li>Key則輸入公鑰github-deploy-key.pub的內容</li>
+<li>注意下方的<code>Allow write access</code>要記得打勾</li>
+</ul>
+</li>
+</ol>
+<h3 id="撰寫Github-Actions"><a href="#撰寫Github-Actions" class="headerlink" title="撰寫Github Actions"></a>撰寫Github Actions</h3><p>在不是要部署靜態文件的branch建立<code>.github/workflows/HexoCI.yml</code>。</p>
+<p>HexoCI.yml填入以下內容</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">CI</span></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">branches:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">main</span></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">build:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Checkout</span> <span class="string">source</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/checkout@v2</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">ref:</span> <span class="string">main</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Use</span> <span class="string">Node.js</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/setup-node@v2</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">node-version:</span> <span class="string">&#x27;14&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Setup</span> <span class="string">hexo</span></span><br><span class="line">        <span class="attr">env:</span></span><br><span class="line">          <span class="attr">ACTION_DEPLOY:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.HEXO_DEPLOY</span> <span class="string">&#125;&#125;</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line">          <span class="string">mkdir</span> <span class="string">-p</span> <span class="string">~/.ssh/</span></span><br><span class="line">          <span class="string">echo</span> <span class="string">&quot;$ACTION_DEPLOY&quot;</span> <span class="string">&gt;</span> <span class="string">~/.ssh/id_rsa</span></span><br><span class="line">          <span class="string">chmod</span> <span class="number">600</span> <span class="string">~/.ssh/id_rsa</span></span><br><span class="line">          <span class="string">ssh-keyscan</span> <span class="string">github.com</span> <span class="string">&gt;&gt;</span> <span class="string">~/.ssh/known_hosts</span></span><br><span class="line">          <span class="string">git</span> <span class="string">config</span> <span class="string">--global</span> <span class="string">user.email</span> <span class="string">&quot;&lt;Email&gt;&quot;</span></span><br><span class="line">          <span class="string">git</span> <span class="string">config</span> <span class="string">--global</span> <span class="string">user.name</span> <span class="string">&quot;&lt;user name&gt;&quot;</span></span><br><span class="line">          <span class="string">npm</span> <span class="string">install</span> <span class="string">hexo-cli</span> <span class="string">-g</span></span><br><span class="line">          <span class="string">npm</span> <span class="string">install</span> <span class="string">hexo-deployer-git</span> <span class="string">--save</span></span><br><span class="line">          <span class="string">npm</span> <span class="string">install</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Hexo</span> <span class="string">deploy</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line">          <span class="string">hexo</span> <span class="string">generate</span> <span class="string">&amp;&amp;</span> <span class="string">hexo</span> <span class="string">deploy</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Hexo-deploy資料配置"><a href="#Hexo-deploy資料配置" class="headerlink" title="Hexo deploy資料配置"></a>Hexo deploy資料配置</h3><p>到根目錄的<code>_config.yml</code>，增加deploy的資訊</p>
+<p>這邊的repo要用ssh的方式。</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@github.com:Dasre/Dasre.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="確認Github-Actions正常執行"><a href="#確認Github-Actions正常執行" class="headerlink" title="確認Github Actions正常執行"></a>確認Github Actions正常執行</h3><p>在push commit上去後，可以到專案的Actions確認是否正確執行完畢，若正確執行完畢後，可以到專案Settings找到GitHub Pages，並把Source改成Branch為master，儲存後，<code>&lt;username&gt;.github.io</code>應該就會是靜態生成的頁面了。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Andy Chen
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://dasre.github.io/2021/03/22/Hexo/" title="Hexo">https://dasre.github.io/2021/03/22/Hexo/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-tw" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Blog/" rel="tag"># Blog</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/21/git/" rel="prev" title="Git">
+      <i class="fa fa-chevron-left"></i> Git
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/24/Read/" rel="next" title="Read">
+      Read <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Github-Actions%E8%87%AA%E5%8B%95%E9%83%A8%E7%BD%B2Hexo-Blog%E5%88%B0Github-Pages"><span class="nav-number">1.</span> <span class="nav-text">Github Actions自動部署Hexo Blog到Github Pages</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hexo%E5%AE%89%E8%A3%9D%E8%88%87%E4%B8%BB%E9%A1%8C%E5%AE%89%E8%A3%9D"><span class="nav-number">1.2.</span> <span class="nav-text">Hexo安裝與主題安裝</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%9DHexo"><span class="nav-number">1.2.1.</span> <span class="nav-text">安裝Hexo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%9DHexo-Next%E4%B8%BB%E9%A1%8C"><span class="nav-number">1.2.2.</span> <span class="nav-text">安裝Hexo Next主題</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Next%E4%B8%BB%E9%A1%8C%E4%B9%8B%E8%A8%AD%E5%AE%9A"><span class="nav-number">1.2.3.</span> <span class="nav-text">Next主題之設定</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Github-Pages%E8%A8%AD%E5%AE%9A"><span class="nav-number">1.3.</span> <span class="nav-text">Github Pages設定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Travis-CI%E8%A8%AD%E5%AE%9A-%E8%88%8A%E6%96%B9%E6%B3%95"><span class="nav-number">1.4.</span> <span class="nav-text">Travis CI設定(舊方法)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GitHub-Actions%E9%83%A8%E7%BD%B2"><span class="nav-number">1.5.</span> <span class="nav-text">GitHub Actions部署</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8BKey"><span class="nav-number">1.5.1.</span> <span class="nav-text">建立Key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Github%E5%8A%A0%E5%85%A5Key"><span class="nav-number">1.5.2.</span> <span class="nav-text">Github加入Key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%92%B0%E5%AF%ABGithub-Actions"><span class="nav-number">1.5.3.</span> <span class="nav-text">撰寫Github Actions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hexo-deploy%E8%B3%87%E6%96%99%E9%85%8D%E7%BD%AE"><span class="nav-number">1.5.4.</span> <span class="nav-text">Hexo deploy資料配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A2%BA%E8%AA%8DGithub-Actions%E6%AD%A3%E5%B8%B8%E5%9F%B7%E8%A1%8C"><span class="nav-number">1.5.5.</span> <span class="nav-text">確認Github Actions正常執行</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Andy Chen</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dasre" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dasre" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:an5566x@gmail.com" title="E-Mail → mailto:an5566x@gmail.com" rel="noopener" target="_blank"><i class="envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-tw" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Andy Chen</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://Dasre-blog.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://dasre.github.io/2021/03/22/Hexo/";
+    this.page.identifier = "2021/03/22/Hexo/";
+    this.page.title = "Hexo";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://Dasre-blog.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>
