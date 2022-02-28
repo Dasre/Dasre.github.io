@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"dasre.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="VS code內使用Z Shell進行開發在因工作的關係，最近需要使用Windows OS進行開發，然而在Windows內，並不能使用Z shell，也因此讓我在尋找是否有可以在Windows內使用Z Shell的方法。 在Windows OS裡面，我們都知道能使用的shell只有CMD和Power Shell，前者因時間久遠，許多的功能並不齊全，而後者雖然功能強大，但許多語法與我在macOS使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Terminal">
+<meta property="og:url" content="https://dasre.github.io/2019/11/04/Terminal/index.html">
+<meta property="og:site_name" content="Andy Blog">
+<meta property="og:description" content="VS code內使用Z Shell進行開發在因工作的關係，最近需要使用Windows OS進行開發，然而在Windows內，並不能使用Z shell，也因此讓我在尋找是否有可以在Windows內使用Z Shell的方法。 在Windows OS裡面，我們都知道能使用的shell只有CMD和Power Shell，前者因時間久遠，許多的功能並不齊全，而後者雖然功能強大，但許多語法與我在macOS使用">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://dasre.github.io/2019/11/04/Terminal/VScode.png">
+<meta property="article:published_time" content="2019-11-04T14:07:06.000Z">
+<meta property="article:modified_time" content="2022-02-28T14:44:58.175Z">
+<meta property="article:author" content="Andy Chen">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://dasre.github.io/2019/11/04/Terminal/VScode.png">
+
+<link rel="canonical" href="https://dasre.github.io/2019/11/04/Terminal/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Terminal | Andy Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Andy Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://dasre.github.io/2019/11/04/Terminal/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Andy Chen">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Andy Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Terminal
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-11-04 22:07:06" itemprop="dateCreated datePublished" datetime="2019-11-04T22:07:06+08:00">2019-11-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-02-28 22:44:58" itemprop="dateModified" datetime="2022-02-28T22:44:58+08:00">2022-02-28</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2019/11/04/Terminal/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/11/04/Terminal/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="VS-code內使用Z-Shell進行開發"><a href="#VS-code內使用Z-Shell進行開發" class="headerlink" title="VS code內使用Z Shell進行開發"></a>VS code內使用Z Shell進行開發</h1><p>在因工作的關係，最近需要使用Windows OS進行開發，然而在Windows內，並不能使用Z shell，也因此讓我在尋找是否有可以在Windows內使用Z Shell的方法。</p>
+<p>在Windows OS裡面，我們都知道能使用的shell只有CMD和Power Shell，前者因時間久遠，許多的功能並不齊全，而後者雖然功能強大，但許多語法與我在macOS使用Z Shell的語法不同，造成使用體驗並不良好。</p>
+<p>最近在Will 保哥的blog的文章發現<a target="_blank" rel="noopener" href="https://blog.miniasp.com/post/2019/02/01/Useful-tool-WSL-Windows-Subsystem-for-Linux">WSL</a>這套工具，因此有了這次的實作。以下會簡單說明如何在VS code透過WSL將Terminal改成Z Shell。關於WSL的安裝方法請參考上述的連結。</p>
+<hr>
+<h3 id="關於WSL-Linux系統選擇"><a href="#關於WSL-Linux系統選擇" class="headerlink" title="關於WSL Linux系統選擇"></a>關於WSL Linux系統選擇</h3><p>我個人是選擇Ubuntu 16.04，主要是以往在Linux環境下進行開發時就是使用此OS，至於像Ubuntu 18.04我想語法也不會有太大的差別。</p>
+<hr>
+<h3 id="安裝Z-Shell和oh-my-zsh"><a href="#安裝Z-Shell和oh-my-zsh" class="headerlink" title="安裝Z Shell和oh-my-zsh"></a>安裝Z Shell和oh-my-zsh</h3><p>在WSL安裝完畢且設定完帳號密碼後，完成後會是Ubuntu的Bash介面，我們要在此介面下安裝Z Shell和oh-my-zsh。</p>
+<h4 id="在安裝之前請記得先執行以下code進行更新"><a href="#在安裝之前請記得先執行以下code進行更新" class="headerlink" title="在安裝之前請記得先執行以下code進行更新"></a>在安裝之前請記得先執行以下code進行更新</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo apt update &amp;&amp; sudo apt upgrade</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="安裝zsh、切換zsh"><a href="#安裝zsh、切換zsh" class="headerlink" title="安裝zsh、切換zsh"></a>安裝zsh、切換zsh</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//安裝Z Shell</span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo apt-get install zsh</span></span><br><span class="line"></span><br><span class="line">//切換bash -&gt; zsh</span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">which</span> zsh</span></span><br><span class="line">(/usr/bin/zsh)</span><br><span class="line"><span class="meta">$</span><span class="bash"> chsh -s /usr/bin/zsh</span> </span><br></pre></td></tr></table></figure>
+
+<h4 id="安裝oh-my-zsh"><a href="#安裝oh-my-zsh" class="headerlink" title="安裝oh-my-zsh"></a>安裝oh-my-zsh</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//安裝oh-my-zsh</span><br><span class="line"><span class="meta">$</span><span class="bash"> sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)</span>&quot;</span></span></span><br><span class="line"></span><br><span class="line">//更改theme（可自行選擇）</span><br><span class="line">//要使用vim nano哪種方法編輯都可以</span><br><span class="line"><span class="meta">$</span><span class="bash"> vim ~/.zshrc</span></span><br><span class="line">//在.zshrc文件中找到 ZSH_THEME=&quot;...&quot;並更改要使用之主題</span><br><span class="line">//我自己是使用astro(主題請自行google取得)</span><br><span class="line">ZSH_THEME=&quot;astro&quot;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在.zshrc文件中同時可修改字體大小、字體等設定，同時一些highlight的套件也須透過.zshrc去設定</li>
+</ul>
+<hr>
+<h3 id="在VS-code使用Z-Shell"><a href="#在VS-code使用Z-Shell" class="headerlink" title="在VS code使用Z Shell"></a>在VS code使用Z Shell</h3><p>至settings.json設定，並加入下列指令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;terminal.integrated.shell.windows&quot;: &quot;C:\\Windows\\System32\\bash.exe&quot;,</span><br><span class="line">    &quot;terminal.integrated.shellArgs.windows&quot;: [</span><br><span class="line">        &quot;-c&quot;,</span><br><span class="line">        &quot;zsh&quot;</span><br><span class="line">    ],</span><br></pre></td></tr></table></figure>
+<p>如出現字元無法呈現或框框等圖案，或許是字體上出問題，請加入下列指令。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;terminal.integrated.fontFamily&quot;: &quot;&#x27;Ubuntu Mono derivative Powerline&#x27;&quot;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="最終成果"><a href="#最終成果" class="headerlink" title="最終成果"></a>最終成果</h3><img src="/2019/11/04/Terminal/VScode.png" class="">
+
+
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Andy Chen
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://dasre.github.io/2019/11/04/Terminal/" title="Terminal">https://dasre.github.io/2019/11/04/Terminal/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-tw" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/10/01/react-props/" rel="prev" title="React props & state">
+      <i class="fa fa-chevron-left"></i> React props & state
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/11/05/Vagrant/" rel="next" title="Vagrant">
+      Vagrant <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#VS-code%E5%85%A7%E4%BD%BF%E7%94%A8Z-Shell%E9%80%B2%E8%A1%8C%E9%96%8B%E7%99%BC"><span class="nav-number">1.</span> <span class="nav-text">VS code內使用Z Shell進行開發</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%9C%E6%96%BCWSL-Linux%E7%B3%BB%E7%B5%B1%E9%81%B8%E6%93%87"><span class="nav-number">1.0.1.</span> <span class="nav-text">關於WSL Linux系統選擇</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%9DZ-Shell%E5%92%8Coh-my-zsh"><span class="nav-number">1.0.2.</span> <span class="nav-text">安裝Z Shell和oh-my-zsh</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%A8%E5%AE%89%E8%A3%9D%E4%B9%8B%E5%89%8D%E8%AB%8B%E8%A8%98%E5%BE%97%E5%85%88%E5%9F%B7%E8%A1%8C%E4%BB%A5%E4%B8%8Bcode%E9%80%B2%E8%A1%8C%E6%9B%B4%E6%96%B0"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">在安裝之前請記得先執行以下code進行更新</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%9Dzsh%E3%80%81%E5%88%87%E6%8F%9Bzsh"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">安裝zsh、切換zsh</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%9Doh-my-zsh"><span class="nav-number">1.0.2.3.</span> <span class="nav-text">安裝oh-my-zsh</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8VS-code%E4%BD%BF%E7%94%A8Z-Shell"><span class="nav-number">1.0.3.</span> <span class="nav-text">在VS code使用Z Shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E7%B5%82%E6%88%90%E6%9E%9C"><span class="nav-number">1.0.4.</span> <span class="nav-text">最終成果</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Andy Chen</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dasre" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dasre" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:an5566x@gmail.com" title="E-Mail → mailto:an5566x@gmail.com" rel="noopener" target="_blank"><i class="envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-tw" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Andy Chen</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://Dasre-blog.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://dasre.github.io/2019/11/04/Terminal/";
+    this.page.identifier = "2019/11/04/Terminal/";
+    this.page.title = "Terminal";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://Dasre-blog.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>
