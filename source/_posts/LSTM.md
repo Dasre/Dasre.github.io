@@ -2,7 +2,7 @@
 title: LSTM
 date: 2019-02-19 17:50:03
 tags:
----
+---2
 
 LSTM的input須為三維，其一些參數介紹
 

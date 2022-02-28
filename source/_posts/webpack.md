@@ -56,8 +56,9 @@ webpack的設定檔中，大致上有4個屬性可以使用。
 * output則是檔案經過webpack打包後的存放的路徑和檔名。這邊要使用絕對路徑，所以可以透過path套件來取得目前資料夾的路徑。
   * filename的部分，如果像上述[name]的寫法，name會輸出成entry所輸入key的內容。
   * 通常經過webpack打包完的檔案，我們會使用bundle.js。關於module、chunk、bundle的後續會再說明。
-* loader的部分，我個人是把它想成一個處理器的概念。他可以幫我們把任何東西轉換成JavaScript，讓webpack能看得懂。
-* plugins顧名思義就是外掛的意思。有些webpack的套件需要傳入參數，這時就可以在plugin裡設定。
+* loader的部分，在上方的設定檔要寫成module。我個人是把它想成一個處理器的概念（翻意的功能）（負責"讀"的功能）。他可以幫我們把任何東西轉換成JavaScript，讓webpack能看得懂。
+* plugins顧名思義就是外掛的意思。上方的loader部分有提到，loader只會做"讀"的動作，但有時候我們會希望webpack幫我們做一些其他動作（ex:寫）之類的，這時候就需要透過plugins這個欄位。有些webpack的套件需要傳入參數，這時就可以在plugin裡設定。
+* mode為設定專案為production或development。
 
 ---
 
@@ -71,6 +72,19 @@ webpack的設定檔中，大致上有4個屬性可以使用。
 關於mode後面的production和development主要是讓module在打包的時候會選擇使用哪種方式。production通常會讓打包出來的檔案較小，而development主要是要加速開發的速度，也因此在檔案壓縮得部分較小，會盡快把需要編譯的東西編譯完。
 
 watch則是不必每次修改檔案重新使用webpack打包時，需要重新下指令，方便開發時減少指令的輸入。
+
+---
+
+## webpack5 Asset Modules
+在webpack5之前，我們知道假使我們要搬移檔案到框架指定的output資料夾，我們要透過`file-loader`來幫助我們實現。但在webpack5後，webpack將一些我們常用於處理靜態檔案的loader加入webpack中，也就是我們不需要額外去配置這些loader。
+
+目前有配置4種Asset Modules
+* asset/resource 對應的是 `file-loader`
+* asset/inline 對應的是 `url-loader`
+* asset/source 對應的是 `raw-loader`
+* asset則會根據設定（預設是8kb）抉擇檔案會變成inline（像圖片就是轉成base64）還是獨立的檔案。
+
+[參考連結](https://webpack.js.org/guides/asset-modules/)
 
 ---
 ## 補充：關於NODE_EVN問題

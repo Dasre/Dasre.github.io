@@ -7,7 +7,7 @@ tags:
 
 # Discord Bot
 要製作Discord Bot目前主要有兩個API可以使用。
-
+f
 * discord.io (官方維護)
 * discord.js (民間版本)
 
